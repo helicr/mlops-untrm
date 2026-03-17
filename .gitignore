@@ -55,6 +55,16 @@ Thumbs.db
 *.tmp
 *.log
 
+# --- Scripts locales ---
+start.cmd
+
+# --- Certificados ---
+*.crt
+
 # --- Archivos temporales PowerPoint ---
 ~$*.pptx
 ~$*.xlsx
+
+# .gitignore
+.env
+.env.*
