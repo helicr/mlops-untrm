@@ -63,6 +63,71 @@ jobs:
           flake8 src/ --max-line-length=100 --ignore=E501,W503
 
   # ─────────────────────────────────────────────────────────
+  # JOB 1.5: Monitoreo — detectar drift antes de re-entrenar
+  # Solo en ejecución programada (cron semanal)
+  # ─────────────────────────────────────────────────────────
+  monitoreo:
+    name: "Monitor — Detección de Drift"
+    runs-on: ubuntu-latest
+    needs: ci
+    if: github.event_name == 'schedule'
+    outputs:
+      requiere_reentrenamiento: ${{ steps.monitor.outputs.requiere_reentrenamiento }}
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Descargar último modelo de producción
+        uses: actions/download-artifact@v4
+        with:
+          name: modelo-produccion-${{ github.sha }}
+          path: experiments/
+        continue-on-error: true
+
+      - name: Preparar datos para monitoreo
+        run: |
+          python src/data/preparar_datos.py
+          python src/features/ingenieria_features.py
+
+      - name: Ejecutar monitor de drift
+        id: monitor
+        run: |
+          python -c "
+          import sys, json
+          sys.path.insert(0, '.')
+          import yaml
+          from src.monitoring.monitor import generar_reporte_monitoreo
+          with open('config/config.yaml') as f:
+              cfg = yaml.safe_load(f)
+          reporte = generar_reporte_monitoreo(cfg)
+          requiere = reporte['requiere_reentrenamiento']
+          print(f'Requiere reentrenamiento: {requiere}')
+          with open('$GITHUB_OUTPUT', 'a') as gh_out:
+              gh_out.write(f'requiere_reentrenamiento={str(requiere).lower()}\n')
+          if requiere:
+              print('⚠️  DRIFT DETECTADO — Se iniciará re-entrenamiento')
+          else:
+              print('✅ Modelo estable — No se requiere re-entrenamiento')
+          "
+
+      - name: Subir reporte de monitoreo
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-monitoreo-${{ github.sha }}
+          path: experiments/reporte_monitoreo.json
+          retention-days: 90
+
+  # ─────────────────────────────────────────────────────────
   # JOB 2: Entrenamiento y Evaluación del Modelo
   # Se ejecuta en: push a master, PR a master, schedule
   # NO se ejecuta en push a develop (solo CI)
