@@ -1,0 +1,26 @@
+{
+  "timestamp": "2026-03-16T12:50:12.333499",
+  "algoritmo": "gradient_boosting",
+  "n_muestras_test": 3959,
+  "metricas": {
+    "rmse": 0.4808126931690315,
+    "mae": 0.3176927891085089,
+    "r2": 0.8124696094150237,
+    "mse": 0.23118084591245727
+  },
+  "aprobado": true,
+  "detalle_aprobacion": {
+    "rmse": {
+      "valor": 0.4808126931690315,
+      "umbral": 0.5,
+      "aprobado": true,
+      "condicion": "RMSE (0.4808) < 0.5"
+    },
+    "r2": {
+      "valor": 0.8124696094150237,
+      "umbral": 0.8,
+      "aprobado": true,
+      "condicion": "R\u00b2 (0.8125) > 0.8"
+    }
+  }
+}

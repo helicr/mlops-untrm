@@ -1,0 +1,59 @@
+{
+  "timestamp": "2026-03-16T12:50:12.466062",
+  "data_drift": {
+    "hay_drift": true,
+    "features_con_drift": [
+      "MedInc",
+      "HouseAge",
+      "AveRooms",
+      "AveBedrms",
+      "Population",
+      "AveOccup",
+      "Latitude",
+      "Longitude"
+    ],
+    "detalle": {
+      "MedInc": {
+        "psi": 10.641952790806583,
+        "drift_detectado": true
+      },
+      "HouseAge": {
+        "psi": 11.516172264892052,
+        "drift_detectado": true
+      },
+      "AveRooms": {
+        "psi": 10.641949640291118,
+        "drift_detectado": true
+      },
+      "AveBedrms": {
+        "psi": 12.433104115904927,
+        "drift_detectado": true
+      },
+      "Population": {
+        "psi": 11.512814891688741,
+        "drift_detectado": true
+      },
+      "AveOccup": {
+        "psi": 12.433104076011128,
+        "drift_detectado": true
+      },
+      "Latitude": {
+        "psi": 11.512862322645567,
+        "drift_detectado": true
+      },
+      "Longitude": {
+        "psi": 11.513007454103144,
+        "drift_detectado": true
+      }
+    }
+  },
+  "concept_drift": {
+    "hay_degradacion": false,
+    "rmse_original": 0.4808126931690315,
+    "rmse_actual": 0.5106884118235572,
+    "incremento_pct": 6.21,
+    "umbral_pct": 10.0
+  },
+  "requiere_reentrenamiento": true,
+  "accion_recomendada": "RE-ENTRENAR EL MODELO con datos recientes"
+}

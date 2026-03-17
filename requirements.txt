@@ -1,0 +1,26 @@
+# ============================================================
+# Dependencias del Proyecto MLOps
+# ============================================================
+
+# Core de ciencia de datos
+numpy>=1.24.0
+pandas>=2.0.0
+scikit-learn>=1.3.0
+
+# Configuración
+pyyaml>=6.0
+
+# API REST (Etapa 6: Despliegue)
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.0.0
+
+# Tracking de experimentos (Etapa 4: Entrenamiento)
+mlflow>=2.10.0
+
+# Pruebas
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Calidad de código (opcional)
+flake8>=6.0.0

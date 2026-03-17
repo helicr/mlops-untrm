@@ -1,0 +1,61 @@
+# ============================================================
+# .gitignore — MLOps: Ciclo de Vida del Modelo
+# ============================================================
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# --- Entornos virtuales ---
+.venv/
+venv/
+env/
+
+# --- Datos (se generan con el pipeline) ---
+data/raw/
+data/processed/
+
+# --- Modelos entrenados y artefactos binarios ---
+experiments/*.pkl
+experiments/mlruns/
+experiments/predicciones_produccion.jsonl
+
+# --- MLflow artifacts ---
+mlruns/
+
+# --- Jupyter checkpoints ---
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# --- Presentaciones y assets generados ---
+pdfs-ppts/output/
+pdfs-ppts/assets/
+
+# --- PDFs de referencia (material externo) ---
+pdfs-ppts/cotent/
+pdfs-ppts/sample/
+
+# --- Docker ---
+*.dockerignore
+
+# --- IDE ---
+.idea/
+.vscode/
+*.iml
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+
+# --- Archivos temporales PowerPoint ---
+~$*.pptx
+~$*.xlsx

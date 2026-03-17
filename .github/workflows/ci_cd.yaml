@@ -1,0 +1,119 @@
+# ============================================================
+# CI/CD Pipeline — MLOps
+# ============================================================
+# Este workflow se ejecuta en cada push a main o pull request.
+# Automatiza: pruebas → entrenamiento → evaluación → despliegue
+#
+# En MLOps, CI/CD significa:
+#   CI (Continuous Integration): cada cambio de código o datos
+#      pasa automáticamente por pruebas y entrenamiento
+#   CD (Continuous Delivery/Deployment): si el modelo aprueba,
+#      se despliega automáticamente a producción
+# ============================================================
+
+name: MLOps Pipeline CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Re-entrenar semanalmente los lunes a las 2am
+    # para incorporar datos nuevos
+    - cron: "0 2 * * 1"
+
+jobs:
+  # ── JOB 1: Pruebas de Calidad ──────────────────────────────
+  pruebas:
+    name: Pruebas y Calidad de Código
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Ejecutar pruebas
+        run: pytest tests/ -v --tb=short
+
+      - name: Verificar estilo de código
+        run: |
+          pip install flake8
+          flake8 src/ --max-line-length=100 --ignore=E501,W503
+
+  # ── JOB 2: Entrenamiento y Evaluación ───────────────────────
+  entrenamiento:
+    name: Entrenamiento y Evaluación del Modelo
+    runs-on: ubuntu-latest
+    needs: pruebas  # Solo si las pruebas pasan
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Etapa 2 — Preparar datos
+        run: python src/data/preparar_datos.py
+
+      - name: Etapa 3 — Ingeniería de features
+        run: python src/features/ingenieria_features.py
+
+      - name: Etapa 4 — Entrenar modelo
+        run: python src/models/entrenar.py
+
+      - name: Etapa 5 — Evaluar modelo
+        run: python src/models/evaluar.py
+        # Si el modelo no aprueba, este paso falla y el despliegue no ocurre
+
+      - name: Guardar artefactos del modelo
+        uses: actions/upload-artifact@v4
+        with:
+          name: modelo-entrenado
+          path: experiments/
+          retention-days: 30
+
+  # ── JOB 3: Despliegue ───────────────────────────────────────
+  despliegue:
+    name: Despliegue a Producción
+    runs-on: ubuntu-latest
+    needs: entrenamiento  # Solo si el modelo fue aprobado
+    if: github.ref == 'refs/heads/main'  # Solo en rama main
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Descargar modelo entrenado
+        uses: actions/download-artifact@v4
+        with:
+          name: modelo-entrenado
+          path: experiments/
+
+      - name: Desplegar API
+        run: |
+          echo "Desplegando modelo a producción..."
+          # Aquí iría el comando de despliegue real:
+          # docker build -t mlops-api:latest .
+          # docker push registry/mlops-api:latest
+          # kubectl apply -f k8s/deployment.yaml
+          echo "✅ Despliegue completado"
+
+      - name: Notificar éxito
+        run: |
+          echo "🚀 Modelo desplegado exitosamente"
+          echo "   Versión: ${{ github.sha }}"
+          echo "   Fecha: $(date)"
