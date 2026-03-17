@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-16T12:50:12.466062",
+  "timestamp": "2026-03-17T02:47:10.625343",
   "data_drift": {
     "hay_drift": true,
     "features_con_drift": [
@@ -14,35 +14,35 @@
     ],
     "detalle": {
       "MedInc": {
-        "psi": 10.641952790806583,
+        "psi": 6.409133408359378,
         "drift_detectado": true
       },
       "HouseAge": {
-        "psi": 11.516172264892052,
+        "psi": 4.8289583378341465,
         "drift_detectado": true
       },
       "AveRooms": {
-        "psi": 10.641949640291118,
+        "psi": 4.004004414608382,
         "drift_detectado": true
       },
       "AveBedrms": {
-        "psi": 12.433104115904927,
+        "psi": 8.939558341784737,
         "drift_detectado": true
       },
       "Population": {
-        "psi": 11.512814891688741,
+        "psi": 4.863720054631096,
         "drift_detectado": true
       },
       "AveOccup": {
-        "psi": 12.433104076011128,
+        "psi": 2.669333109334738,
         "drift_detectado": true
       },
       "Latitude": {
-        "psi": 11.512862322645567,
+        "psi": 5.086793421420268,
         "drift_detectado": true
       },
       "Longitude": {
-        "psi": 11.513007454103144,
+        "psi": 4.866353305724397,
         "drift_detectado": true
       }
     }
@@ -50,8 +50,8 @@
   "concept_drift": {
     "hay_degradacion": false,
     "rmse_original": 0.4808126931690315,
-    "rmse_actual": 0.5106884118235572,
-    "incremento_pct": 6.21,
+    "rmse_actual": 0.5210601948377743,
+    "incremento_pct": 8.37,
     "umbral_pct": 10.0
   },
   "requiere_reentrenamiento": true,
