@@ -15,7 +15,6 @@ En MLOps esto es crítico porque:
 ============================================================
 """
 
-import os
 import sys
 import yaml
 import logging
@@ -104,7 +103,7 @@ def validar_datos(df: pd.DataFrame, cfg: dict) -> bool:
     target = cfg["datos"]["variable_objetivo"]
     if target in df.columns:
         if df[target].min() <= 0:
-            errores.append(f"La variable objetivo contiene valores <= 0")
+            errores.append("La variable objetivo contiene valores <= 0")
 
     # Reportar resultado
     if errores:
@@ -172,7 +171,6 @@ def dividir_datos(df: pd.DataFrame, cfg: dict) -> tuple[pd.DataFrame, pd.DataFra
     """
     log.info("▶ Dividiendo datos en train/test...")
 
-    target = cfg["datos"]["variable_objetivo"]
     proporcion_test = cfg["datos"]["proporcion_test"]
     semilla = cfg["datos"]["semilla"]
 
