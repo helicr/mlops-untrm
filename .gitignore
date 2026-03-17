@@ -34,13 +34,12 @@ mlruns/
 .ipynb_checkpoints/
 */.ipynb_checkpoints/
 
-# --- Presentaciones y assets generados ---
-pdfs-ppts/output/
+# --- pdfs-ppts: excluir material externo y scripts de generación ---
 pdfs-ppts/assets/
-
-# --- PDFs de referencia (material externo) ---
 pdfs-ppts/cotent/
 pdfs-ppts/sample/
+pdfs-ppts/generar_presentacion.py
+pdfs-ppts/generar_ppt_notebooks.py
 
 # --- Docker ---
 *.dockerignore
