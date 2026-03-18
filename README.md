@@ -30,9 +30,9 @@ y mantener modelos en producción de forma confiable, reproducible y automatizad
 
 ---
 
-## Notebooks (00 – 11)
+## Notebooks (00 – 13)
 
-El proyecto está estructurado en 12 notebooks que cubren el flujo end-to-end:
+El proyecto está estructurado en 14 notebooks que cubren el flujo end-to-end:
 
 | Notebook | Tema | Contenido principal |
 |----------|------|---------------------|
@@ -48,6 +48,8 @@ El proyecto está estructurado en 12 notebooks que cubren el flujo end-to-end:
 | `09_explicabilidad_shap.ipynb` | Explicabilidad | SHAP values, beeswarm, dependence plots, waterfall |
 | `10_validacion_datos.ipynb` | Validación | Pandera — schema contracts y detección de errores |
 | `11_ab_testing.ipynb` | A/B Testing | Prueba controlada Modelo A vs B, análisis estadístico, aprobación manual |
+| `12_model_card.ipynb` | Model Card | Documentación estructurada: métricas por subgrupo, limitaciones, ética |
+| `13_inferencia_batch.ipynb` | Inferencia Batch | Predicciones masivas programadas, throughput, scheduling, trazabilidad |
 
 **Criterios de calidad del modelo:** RMSE < 0.5 | R² > 0.80
 
@@ -78,7 +80,7 @@ mlops-ciclo-vida/
 ├── data/
 │   ├── raw/                         # Datos originales (housing_raw.csv)
 │   └── processed/                   # train.csv y test.csv tras el split
-├── notebooks/                       # Notebooks 00–11 (flujo completo)
+├── notebooks/                       # Notebooks 00–13 (flujo completo)
 ├── src/
 │   ├── data/preparar_datos.py       # Etapa 2: Ingestión y limpieza
 │   ├── features/ingenieria_features.py  # Etapa 3: Feature engineering
