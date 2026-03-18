@@ -27,6 +27,7 @@ Cómo probar:
 """
 
 import sys
+import json
 import pickle
 import logging
 import numpy as np
@@ -130,7 +131,6 @@ def predecir(datos: dict) -> dict:
     ruta_log = ROOT / "experiments" / "predicciones_produccion.jsonl"
     ruta_log.parent.mkdir(parents=True, exist_ok=True)
     with open(ruta_log, "a") as f:
-        import json
         f.write(json.dumps(registro) + "\n")
 
     # El precio está en unidades de $100,000 en el dataset California Housing
