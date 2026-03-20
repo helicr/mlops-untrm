@@ -60,7 +60,7 @@ jobs:
       - name: Verificar calidad de código
         run: |
           pip install flake8
-          flake8 src/ --max-line-length=100 --ignore=E501,W503
+          flake8 src/ --max-line-length=100 --ignore=E501,W503,E221,E241
 
   # ─────────────────────────────────────────────────────────
   # JOB 1.5: Monitoreo — detectar drift antes de re-entrenar

@@ -1,14 +1,14 @@
 # MLOps: Ciclo de Vida de un Modelo de Ciencia de Datos
 
-Este proyecto demuestra el ciclo de vida completo de un modelo de Machine Learning usando MLOps,
-con un ejemplo práctico de **predicción del precio de viviendas**.
+Proyecto educativo que demuestra el ciclo de vida completo de un modelo de Machine Learning
+usando prácticas MLOps, con un ejemplo práctico de **predicción del precio de viviendas en California**.
 
 ---
 
 ## ¿Qué es MLOps?
 
-MLOps (Machine Learning Operations) es un conjunto de prácticas que combina ML, DevOps e Ingeniería
-de Datos para desplegar y mantener modelos de ML en producción de forma confiable y eficiente.
+MLOps (Machine Learning Operations) combina ML, DevOps e Ingeniería de Datos para desplegar
+y mantener modelos en producción de forma confiable, reproducible y automatizada.
 
 ---
 
@@ -28,18 +28,46 @@ de Datos para desplegar y mantener modelos de ML en producción de forma confiab
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Etapas del Ciclo
+---
 
-| Etapa | Descripción | Archivo clave |
-|-------|-------------|---------------|
-| 1. Problema | Definir objetivo, métricas y criterios de éxito | `config/config.yaml` |
-| 2. Datos | Ingestión, validación y limpieza | `src/data/preparar_datos.py` |
-| 3. Features | Transformaciones y creación de variables | `src/features/ingenieria_features.py` |
-| 4. Entrenamiento | Experimentación y selección de modelo | `src/models/entrenar.py` |
-| 5. Evaluación | Validación de métricas y aprobación | `src/models/evaluar.py` |
-| 6. Despliegue | API REST para servir predicciones | `src/serving/api.py` |
-| 7. Monitoreo | Detección de drift y alertas | `src/monitoring/monitor.py` |
-| Pipeline | Orquesta todo el flujo | `pipeline/pipeline_completo.py` |
+## Notebooks (00 – 13)
+
+El proyecto está estructurado en 14 notebooks que cubren el flujo end-to-end:
+
+| Notebook | Tema | Contenido principal |
+|----------|------|---------------------|
+| `00_introduccion.ipynb` | Introducción | Visión general, dataset y stack tecnológico |
+| `01_eda_exploratorio.ipynb` | EDA | Calidad de datos, correlaciones, distribución geográfica |
+| `02_ingenieria_features.ipynb` | Feature Engineering | 5 features derivadas, data leakage, StandardScaler |
+| `03_entrenamiento_mlflow.ipynb` | Entrenamiento | 3 modelos con tracking de experimentos en MLflow |
+| `04_seleccion_modelo.ipynb` | Selección | Cross-Validation 5-fold, bias-variance, curvas de aprendizaje |
+| `05_evaluacion_final.ipynb` | Evaluación | Gate de calidad + MLflow Model Registry |
+| `06_despliegue_api.ipynb` | Despliegue | Docker + FastAPI + Web UI + Swagger |
+| `07_monitoreo_reentrenamiento.ipynb` | Monitoreo | PSI, drift, GitHub Actions, ciclo completo |
+| `08_automl.ipynb` | AutoML | Optuna — búsqueda automática de hiperparámetros (TPE) |
+| `09_explicabilidad_shap.ipynb` | Explicabilidad | SHAP values, beeswarm, dependence plots, waterfall |
+| `10_validacion_datos.ipynb` | Validación | Pandera — schema contracts y detección de errores |
+| `11_ab_testing.ipynb` | A/B Testing | Prueba controlada Modelo A vs B, análisis estadístico, aprobación manual |
+| `12_model_card.ipynb` | Model Card | Documentación estructurada: métricas por subgrupo, limitaciones, ética |
+| `13_inferencia_batch.ipynb` | Inferencia Batch | Predicciones masivas programadas, throughput, scheduling, trazabilidad |
+
+**Criterios de calidad del modelo:** RMSE < 0.5 | R² > 0.80
+
+---
+
+## Stack Tecnológico
+
+| Área | Herramientas |
+|------|-------------|
+| Datos y Modelos | scikit-learn, pandas, numpy |
+| Tracking | MLflow (experimentos + Model Registry) |
+| AutoML | Optuna (TPE sampler) |
+| Explicabilidad | SHAP (TreeExplainer) |
+| Validación de datos | Pandera (schema contracts) |
+| Serving | FastAPI + uvicorn + Docker |
+| CI/CD | GitHub Actions (4 jobs: CI, monitoreo, train/eval, deploy) |
+| Calidad de código | pytest + flake8 |
+| Registro de imágenes | GitHub Container Registry (GHCR) |
 
 ---
 
@@ -48,76 +76,148 @@ de Datos para desplegar y mantener modelos de ML en producción de forma confiab
 ```
 mlops-ciclo-vida/
 ├── config/
-│   └── config.yaml              # Parámetros centralizados del proyecto
+│   └── config.yaml                  # Parámetros centralizados
 ├── data/
-│   ├── raw/                     # Datos originales (no modificar)
-│   └── processed/               # Datos limpios y transformados
+│   ├── raw/                         # Datos originales (housing_raw.csv)
+│   └── processed/                   # train.csv y test.csv tras el split
+├── notebooks/                       # Notebooks 00–13 (flujo completo)
 ├── src/
-│   ├── data/
-│   │   └── preparar_datos.py    # Etapa 2: Ingestión y limpieza
-│   ├── features/
-│   │   └── ingenieria_features.py  # Etapa 3: Feature engineering
-│   ├── models/
-│   │   ├── entrenar.py          # Etapa 4: Entrenamiento
-│   │   └── evaluar.py           # Etapa 5: Evaluación
-│   ├── serving/
-│   │   └── api.py               # Etapa 6: API de predicción
-│   └── monitoring/
-│       └── monitor.py           # Etapa 7: Monitoreo
-├── tests/
-│   ├── test_datos.py            # Pruebas de calidad de datos
-│   └── test_modelo.py           # Pruebas del modelo
+│   ├── data/preparar_datos.py       # Etapa 2: Ingestión y limpieza
+│   ├── features/ingenieria_features.py  # Etapa 3: Feature engineering
+│   ├── models/entrenar.py           # Etapa 4: Entrenamiento
+│   ├── models/evaluar.py            # Etapa 5: Evaluación
+│   ├── serving/api.py               # Etapa 6: API REST de predicción
+│   └── monitoring/monitor.py        # Etapa 7: Monitoreo y drift
 ├── pipeline/
-│   └── pipeline_completo.py    # Orquestador del ciclo completo
-├── experiments/                 # Logs de experimentos MLflow
+│   └── pipeline_completo.py         # Orquesta todo el flujo
+├── tests/
+│   ├── test_datos.py
+│   └── test_modelo.py
+├── experiments/                     # Artefactos MLflow (modelo.pkl, scaler.pkl)
 ├── .github/workflows/
-│   └── ci_cd.yaml               # Pipeline CI/CD
+│   └── ci_cd.yaml                   # Pipeline CI/CD automatizado
+├── Dockerfile
+├── docker-compose.yml
 ├── requirements.txt
-└── Makefile                     # Comandos de utilidad
+└── Makefile
 ```
 
 ---
 
-## Instalación y Uso
+## Instalación
 
 ```bash
-# 1. Instalar dependencias
+# Crear entorno conda
+conda create -n mlops-ciclo-vida python=3.11
+conda activate mlops-ciclo-vida
+
+# Instalar dependencias
 pip install -r requirements.txt
 
-# 2. Ejecutar el pipeline completo (todas las etapas)
-python pipeline/pipeline_completo.py
+# Registrar kernel de Jupyter
+python -m ipykernel install --user --name mlops-ciclo-vida
+```
 
-# 3. Ejecutar etapas individuales
+---
+
+## Uso
+
+### Ejecutar el pipeline completo
+
+```bash
+python pipeline/pipeline_completo.py
+```
+
+### Ejecutar etapas individuales
+
+```bash
 python src/data/preparar_datos.py
 python src/features/ingenieria_features.py
 python src/models/entrenar.py
 python src/models/evaluar.py
+```
 
-# 4. Levantar la API de predicción
+### Levantar la API de predicción
+
+```bash
+# Con Docker (recomendado)
+docker-compose up
+
+# Sin Docker
 uvicorn src.serving.api:app --reload
+# API:     http://localhost:8000
+# Web UI:  http://localhost:8000/ui
+# Docs:    http://localhost:8000/docs
+```
 
-# 5. Correr pruebas
-pytest tests/ -v
+### Ver experimentos en MLflow UI
 
-# 6. Ver experimentos en MLflow UI
+```bash
 mlflow ui --backend-store-uri experiments/
+# http://localhost:5000
+```
+
+### Ejecutar pruebas
+
+```bash
+pytest tests/ -v
 ```
 
 ---
 
-## Ejemplo Práctico: Predicción de Precio de Viviendas
+## CI/CD — GitHub Actions
 
-**Dataset:** California Housing (sklearn)
-**Objetivo:** Predecir el precio mediano de viviendas en bloques de California
-**Métrica principal:** RMSE (Root Mean Squared Error)
-**Criterio de éxito:** RMSE < 0.5 (escala normalizada) | R² > 0.80
+El pipeline (`.github/workflows/ci_cd.yaml`) se activa en push a `develop`/`master`,
+PR a `master` y cron semanal (lunes 2am UTC):
+
+| Job | Cuándo | Qué hace |
+|-----|--------|----------|
+| `ci` | Siempre | pytest + flake8 |
+| `monitoreo` | Solo cron | Detección de drift (PSI) |
+| `entrenar-evaluar` | master / PR / cron | Entrena, evalúa y valida gate RMSE/R² |
+| `despliegue` | Solo push a master | Docker build + push a GHCR |
+
+Imagen Docker publicada en: `ghcr.io/helicr/mlops-api-viviendas:latest`
 
 ---
 
-## Conceptos Clave de MLOps
+## Generación de Presentaciones
 
-- **Reproducibilidad:** Cada experimento queda registrado con parámetros, métricas y artefactos
-- **Versionado:** Datos, código y modelos tienen versiones
-- **Automatización:** El pipeline puede ejecutarse sin intervención manual
-- **Monitoreo:** Se detecta cuando el modelo degrada (data drift / concept drift)
-- **Re-entrenamiento:** El ciclo se reinicia automáticamente si se detecta degradación
+Los scripts de `pdfs-ppts/` generan las presentaciones PowerPoint del curso.
+Ejecutar **en este orden** desde la raíz del proyecto:
+
+```bash
+# Paso 1 — Ejecutar todos los notebooks y guardar sus outputs
+python pdfs-ppts/ejecutar_notebooks.py
+
+# Paso 2 — Generar gráficos matplotlib y extraer screenshots de notebooks
+python pdfs-ppts/capturar_imagenes.py
+
+# Paso 3 — Generar el PPT final (~65 slides)
+python pdfs-ppts/generar_ppt_notebooks.py
+# Salida: pdfs-ppts/output/mlops_ejemplo_notebooks.pptx
+```
+
+> Los scripts `crear_nb*.py` y `fix_*.py` son de uso único (ya ejecutados).
+> No volver a ejecutarlos salvo que se necesite regenerar los notebooks desde cero.
+
+---
+
+## Dataset
+
+**California Housing** (sklearn.datasets.fetch_california_housing)
+- 20,640 muestras del censo de California (1990)
+- 8 features originales → 13 tras feature engineering
+- Target: precio mediano de la vivienda en bloques censales ($100K)
+- Sin valores nulos ni duplicados
+
+---
+
+## Conceptos Clave
+
+- **Reproducibilidad:** cada experimento queda registrado con parámetros, métricas y artefactos en MLflow
+- **Data Leakage:** el scaler se ajusta solo en train y se aplica en test/producción
+- **Training-Serving Parity:** `scaler.pkl` serializado garantiza la misma transformación en producción
+- **Model Registry:** versionado y aprobación formal antes de promover a producción
+- **PSI (Population Stability Index):** detecta data drift; PSI > 0.2 dispara re-entrenamiento
+- **Gate de Calidad:** RMSE < 0.5 y R² > 0.80 como condición para el despliegue automático

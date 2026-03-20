@@ -104,8 +104,13 @@ def registrar_experimento(
 
     # Intentar usar MLflow
     try:
+        import warnings as _w
+        import logging as _lg
+        _w.filterwarnings("ignore", category=FutureWarning, module="mlflow")
         import mlflow
         import mlflow.sklearn
+        _lg.getLogger("mlflow.models.model").setLevel(_lg.ERROR)
+        _lg.getLogger("mlflow.sklearn").setLevel(_lg.ERROR)
 
         ruta_experiments = ROOT / cfg["experimentos"]["ruta"]
         uri = ruta_experiments.resolve().as_uri()
@@ -126,7 +131,8 @@ def registrar_experimento(
                 mlflow.log_metric(f"val_{k}", v)
 
             # Registrar el artefacto del modelo
-            mlflow.sklearn.log_model(pickle.load(open(ruta_modelo, "rb")), "modelo")
+            with open(ruta_modelo, "rb") as f_modelo:
+                mlflow.sklearn.log_model(pickle.load(f_modelo), "modelo")
 
         log.info("  ✓ Experimento registrado en MLflow (ID: %s)", experimento_id)
 
