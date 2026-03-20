@@ -119,8 +119,6 @@ def validar_entrada(df: pd.DataFrame) -> None:
     if nulos.any():
         log.warning("Filas con nulos detectadas:\n%s", nulos[nulos > 0].to_string())
 
-    numericas = ["MedInc", "HouseAge", "AveRooms", "AveBedrms",
-                 "Population", "AveOccup", "Latitude", "Longitude"]
     positivas = ["MedInc", "HouseAge", "AveRooms", "AveBedrms", "Population", "AveOccup"]
     for col in positivas:
         if (df[col] <= 0).any():
