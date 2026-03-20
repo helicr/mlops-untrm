@@ -58,6 +58,33 @@ Thumbs.db
 # --- Scripts locales ---
 start.cmd
 
+# --- Node / npm (herramientas locales de presentacion) ---
+node_modules/
+package.json
+package-lock.json
+
+# --- Outputs generados ---
+output/
+
+# --- MLflow experiment artifacts (binarios grandes) ---
+experiments/169775168716009235/
+experiments/741316909501968302/
+experiments/ab_log.jsonl
+experiments/ab_resultado.json
+experiments/batch_output/*.csv
+experiments/batch_output/*.json
+experiments/model_card.json
+experiments/model_card.md
+experiments/models/
+
+# --- Scripts temporales de generacion de PPTs ---
+pdfs-ppts/fix_*.py
+pdfs-ppts/ejecutar_*.py
+pdfs-ppts/crear_nb*.py
+pdfs-ppts/capturar_imagenes.py
+pdfs-ppts/content/
+pdfs-ppts/output/mlops_ejemplo_notebooks_v2.pptx
+
 # --- Certificados ---
 *.crt
 

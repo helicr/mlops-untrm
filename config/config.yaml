@@ -1,83 +1,65 @@
-# ============================================================
-# ETAPA 1: DEFINICIÓN DEL PROBLEMA
-# Todos los parámetros del proyecto centralizados aquí
-# Cambiar aquí afecta todo el pipeline
-# ============================================================
-
-proyecto:
-  nombre: "prediccion-precio-viviendas"
-  version: "1.0.0"
-  descripcion: "Predecir el precio mediano de viviendas en California"
-  tipo_problema: "regresion"  # regresion | clasificacion
-  autor: "Equipo MLOps"
-
-# ---- Objetivo de negocio ----
-objetivo:
-  descripcion: "Estimar el precio de vivienda para apoyar decisiones de inversión"
-  metrica_principal: "rmse"
-  umbral_aprobacion:
-    rmse: 0.5       # El modelo debe tener RMSE < 0.5
-    r2: 0.80        # Y R² > 0.80
-
-# ---- Datos ----
+api:
+  host: 0.0.0.0
+  puerto: 8000
+  version: v1
 datos:
-  fuente: "sklearn.datasets.fetch_california_housing"
-  variable_objetivo: "MedHouseVal"
-  ruta_raw: "data/raw/housing_raw.csv"
-  ruta_procesada: "data/processed/housing_procesado.csv"
-  ruta_train: "data/processed/train.csv"
-  ruta_test: "data/processed/test.csv"
+  fuente: sklearn.datasets.fetch_california_housing
   proporcion_test: 0.2
+  ruta_procesada: data/processed/housing_procesado.csv
+  ruta_raw: data/raw/housing_raw.csv
+  ruta_test: data/processed/test.csv
+  ruta_train: data/processed/train.csv
   semilla: 42
-
-# ---- Features ----
+  variable_objetivo: MedHouseVal
+experimentos:
+  nombre_experimento: precio-viviendas
+  ruta: experiments/
 features:
-  numericas:
-    - MedInc
-    - HouseAge
-    - AveRooms
-    - AveBedrms
-    - Population
-    - AveOccup
-    - Latitude
-    - Longitude
-  escalar: true
-  metodo_escalado: "standard"  # standard | minmax | robust
   eliminar_outliers: true
-  umbral_outliers: 3.0  # Z-score
-
-# ---- Modelo ----
+  escalar: true
+  metodo_escalado: standard
+  numericas:
+  - MedInc
+  - HouseAge
+  - AveRooms
+  - AveBedrms
+  - Population
+  - AveOccup
+  - Latitude
+  - Longitude
+  umbral_outliers: 3.0
 modelo:
-  algoritmo: "gradient_boosting"  # linear_regression | random_forest | gradient_boosting
+  algoritmo: gradient_boosting
   hiperparametros:
-    random_forest:
-      n_estimators: 100
-      max_depth: 10
-      min_samples_split: 5
-      random_state: 42
     gradient_boosting:
-      n_estimators: 100
-      learning_rate: 0.1
-      max_depth: 5
+      learning_rate: 0.1205712628744377
+      max_depth: 8
+      min_samples_split: 4
+      n_estimators: 250
       random_state: 42
+      subsample: 0.7993292420985183
     linear_regression:
       fit_intercept: true
-  ruta_modelo: "experiments/modelo_produccion.pkl"
-  ruta_scaler: "experiments/scaler.pkl"
-
-# ---- Experimentos (MLflow) ----
-experimentos:
-  ruta: "experiments/"
-  nombre_experimento: "precio-viviendas"
-
-# ---- API ----
-api:
-  host: "0.0.0.0"
-  puerto: 8000
-  version: "v1"
-
-# ---- Monitoreo ----
+    random_forest:
+      max_depth: 10
+      min_samples_split: 5
+      n_estimators: 100
+      random_state: 42
+  ruta_modelo: experiments/modelo_produccion.pkl
+  ruta_scaler: experiments/scaler.pkl
 monitoreo:
-  umbral_drift_psi: 0.2       # PSI > 0.2 indica drift significativo
-  umbral_degradacion_rmse: 0.1  # Si RMSE sube más de 10% → re-entrenar
+  umbral_degradacion_rmse: 0.1
+  umbral_drift_psi: 0.2
   ventana_evaluacion_dias: 7
+objetivo:
+  descripcion: Estimar el precio de vivienda para apoyar decisiones de inversión
+  metrica_principal: rmse
+  umbral_aprobacion:
+    r2: 0.8
+    rmse: 0.5
+proyecto:
+  autor: Equipo MLOps
+  descripcion: Predecir el precio mediano de viviendas en California
+  nombre: prediccion-precio-viviendas
+  tipo_problema: regresion
+  version: 1.0.0
